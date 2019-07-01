@@ -13,4 +13,4 @@ kasama ko dj at russ :D -yves
 
 
 
-Documentation: https://docs.google.com/document/d/1ZwtRVHcpEWM9_veOYWwoHIM7rcSF83pse14sg-0Ccgw/edit
+Documentation: https://docs.google.com/document/d/1ZwtRVHcpEWM9_veOYWwoHIM7rcSF83pse14sg-0Ccgw/edit?usp=sharing
