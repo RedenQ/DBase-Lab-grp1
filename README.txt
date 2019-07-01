@@ -10,7 +10,7 @@ Reden Q //solo ko to kung matapos ako ng maaga samahan ko kayo
 
 
 dj/christian/john
--book/renting
+-booking/renting
 -searching
 
 
