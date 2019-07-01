@@ -9,5 +9,8 @@ Reden Q //solo ko to kung matapos ako ng maaga samahan ko kayo
 -displaying/viewing of item
 
 
+kasama ko dj at russ :D -yves
+
+
 
 Documentation: https://docs.google.com/document/d/1ZwtRVHcpEWM9_veOYWwoHIM7rcSF83pse14sg-0Ccgw/edit
