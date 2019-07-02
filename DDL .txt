@@ -1,0 +1,48 @@
+BOOKING_LOG
+
+CREATE TABLE `booking_log` (
+  `BL_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Check_in` datetime DEFAULT NULL,
+  `check_out` datetime DEFAULT NULL,
+  `clientid` int(11) NOT NULL,
+  `roomno` int(11) NOT NULL,
+  PRIMARY KEY (`BL_id`),
+  KEY `clientid_idx` (`clientid`),
+  KEY `roomno_idx` (`roomno`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+	CHECK OUT
+	
+	CREATE TABLE `check_out` (
+  `co_id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_checkout` datetime DEFAULT NULL,
+  `clientid` int(11) NOT NULL,
+  `BL_id` int(11) NOT NULL,
+  PRIMARY KEY (`co_id`),
+  KEY `clientid_idx` (`clientid`),
+  KEY `BL_id_idx` (`BL_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+
+CLIENT
+
+CREATE TABLE `client` (
+  `clientid` int(5) NOT NULL AUTO_INCREMENT,
+  `fname` varchar(50) DEFAULT NULL,
+  `lname` varchar(50) DEFAULT NULL,
+  `phoneno` varchar(50) DEFAULT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  PRIMARY KEY (`clientid`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1
+
+
+ROOMS 
+
+CREATE TABLE `rooms` (
+  `roomno` int(11) NOT NULL,
+  `Accomodation` int(11) DEFAULT NULL,
+  `Availablity` varchar(45) NOT NULL DEFAULT '"Available"',
+  PRIMARY KEY (`roomno`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
