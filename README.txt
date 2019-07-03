@@ -1,15 +1,8 @@
-Reden Q //solo ko to kung matapos ako ng maaga samahan ko kayo
--login
--displaying/viewing of item
+Distribution of work will be redone and be based on the current task
 
-
-dj/christian/john
--booking/renting
--searching
-
-Laurence/Zaira/David
--sorting
--returning
+Current task:
+Fix database
+Create the menu for the app that'll show the available rooms and be able to search and sort (ui and functionality)
 
 
 Documentation: https://docs.google.com/document/d/1ZwtRVHcpEWM9_veOYWwoHIM7rcSF83pse14sg-0Ccgw/edit?usp=sharing
