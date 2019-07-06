@@ -1,48 +1,68 @@
-BOOKING_LOG
+CLIENT
+CREATE TABLE `client` (
+  `client_id` int(5) NOT NULL AUTO_INCREMENT,
+  `fname` varchar(50) NOT NULL,
+  `lname` varchar(50) NOT NULL,
+  `phoneno` varchar(50) NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `password` varchar(50) NOT NULL,
+  `credit_no` int(11) DEFAULT NULL,
+  `credit_cvv` int(3) DEFAULT NULL,
+  `debit_no` int(11) DEFAULT NULL,
+  `debit_cvv` int(3) DEFAULT NULL,
+  PRIMARY KEY (`client_id`),
+  UNIQUE KEY `email_UNIQUE` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
 
-CREATE TABLE `booking_log` (
-  `BL_id` int(11) NOT NULL AUTO_INCREMENT,
-  `Check_in` datetime DEFAULT NULL,
-  `check_out` datetime DEFAULT NULL,
-  `clientid` int(11) NOT NULL,
-  `roomno` int(11) NOT NULL,
-  PRIMARY KEY (`BL_id`),
-  KEY `clientid_idx` (`clientid`),
-  KEY `roomno_idx` (`roomno`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
 
 	CHECK OUT
 	
-	CREATE TABLE `check_out` (
+CREATE TABLE `check_out` (
   `co_id` int(11) NOT NULL AUTO_INCREMENT,
-  `customer_checkout` datetime DEFAULT NULL,
-  `clientid` int(11) NOT NULL,
-  `BL_id` int(11) NOT NULL,
+  `cust_chkout_date` date NOT NULL,
+  `cust_chkout_time` time NOT NULL,
+  `additional_fees` double DEFAULT NULL,
+  `reserve_id` int(11) NOT NULL,
   PRIMARY KEY (`co_id`),
-  KEY `clientid_idx` (`clientid`),
-  KEY `BL_id_idx` (`BL_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
+  KEY `BL_id_idx` (`reserve_id`),
+  CONSTRAINT `chkout_reserve` FOREIGN KEY (`reserve_id`) REFERENCES `reservation` (`reserve_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+PAYMENT
+CREATE TABLE `payment` (
+  `payment_id` int(11) NOT NULL AUTO_INCREMENT,
+  `Bill` double NOT NULL,
+  `reserve_id` int(5) NOT NULL,
+  PRIMARY KEY (`payment_id`),
+  KEY `reserve_id_idx` (`reserve_id`),
+  CONSTRAINT `payment_reserve` FOREIGN KEY (`reserve_id`) REFERENCES `reservation` (`reserve_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+RESERVATION
+CREATE TABLE `reservation` (
+  `reserve_id` int(11) NOT NULL AUTO_INCREMENT,
+  `check_in_date` date NOT NULL,
+  `check_in_time` time NOT NULL,
+  `check_out_date` date NOT NULL,
+  `check_out_time` time NOT NULL,
+  `client_id` int(11) NOT NULL,
+  `room_id` int(11) NOT NULL,
+  PRIMARY KEY (`reserve_id`),
+  KEY `clientid_idx` (`client_id`),
+  KEY `roomno_idx` (`room_id`),
+  CONSTRAINT `reserve_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `reserve_rooms` FOREIGN KEY (`room_id`) REFERENCES `rooms` (`room_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
 
 
-CLIENT
-
-CREATE TABLE `client` (
-  `clientid` int(5) NOT NULL AUTO_INCREMENT,
-  `fname` varchar(50) DEFAULT NULL,
-  `lname` varchar(50) DEFAULT NULL,
-  `phoneno` varchar(50) DEFAULT NULL,
-  `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  PRIMARY KEY (`clientid`),
-  UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1
-
-
-ROOMS 
+ROOMS
 
 CREATE TABLE `rooms` (
-  `roomno` int(11) NOT NULL,
-  `Accomodation` int(11) DEFAULT NULL,
+  `room_id` int(11) NOT NULL,
+  `Accomodation` varchar(15) NOT NULL,
   `Availablity` varchar(45) NOT NULL DEFAULT '"Available"',
-  PRIMARY KEY (`roomno`)
+  `price_per_night` int(11) NOT NULL,
+  `room_img` longblob NOT NULL,
+  PRIMARY KEY (`room_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
