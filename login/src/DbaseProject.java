@@ -7,7 +7,7 @@ import java.util.*;
  * @author
  */
 public class DbaseProject {
-    
+
     //global variables
     public static String url = "jdbc:mysql://localhost/hotel";
     public static String user = "root";
@@ -20,7 +20,8 @@ public class DbaseProject {
             Scanner kbd = new Scanner(System.in);
             DbaseProject db = new DbaseProject();
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.print(" 1.) View accomodation \n 2.) Login User \n 3.) Register User \n Enter the number of your choice: ");
+            System.out.print(" 1.) View accomodation \n 2.) Login User \n 3.) Register User \n 4.) View available accomodation from cheapest  to most expensive\n"
+                    + " 5.) View available accomodation from most expensive to cheapest \n Enter the number of your choice: ");
             choice = kbd.nextInt();
             switch (choice) {
                 case 1:
@@ -32,12 +33,19 @@ public class DbaseProject {
                 case 3:
                     db.register();
                     break;
+                case 4:
+                    db.sortAccAsc();
+                    break;
+                case 5:
+                    db.sortAccDes();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    //method for viewing available rooms
     public void viewAcc(Connection conn) throws SQLException {
         Statement myStatement = conn.createStatement();
 
@@ -54,6 +62,7 @@ public class DbaseProject {
         }
     }
 
+    //method for logging in
     public void login(Connection conn) throws SQLException {
         Statement state = conn.createStatement();
         Scanner kbd = new Scanner(System.in);
@@ -73,6 +82,7 @@ public class DbaseProject {
         }
     }
 
+    //method for registering account
     public void register() throws SQLException {
         Scanner kbd = new Scanner(System.in);
 
@@ -102,7 +112,36 @@ public class DbaseProject {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
+    //method to call to sort prices from cheapest to most expensive
+    public void sortAccAsc() throws SQLException {
+        Connection conn = DriverManager.getConnection(url, user, pass);
+        Statement state = conn.createStatement();
+        String query = "select room_id, price_per_night from rooms order by price_per_night asc"; //View query here.
+        ResultSet res = state.executeQuery(query);
+
+        while (res.next()) {
+            int room_id = res.getInt(1);
+            double price_per_night = res.getDouble(2);
+
+            System.out.println(room_id + " - " + price_per_night);//Format for output
+        }
+
+    }
+       public void sortAccDes() throws SQLException {
+        Connection conn = DriverManager.getConnection(url, user, pass);
+        Statement state = conn.createStatement();
+        String query = "select room_id, price_per_night from rooms order by price_per_night desc"; //View query here.
+        ResultSet res = state.executeQuery(query);
+
+        while (res.next()) {
+            int room_id = res.getInt(1);
+            double price_per_night = res.getDouble(2);
+
+            System.out.println(room_id + " - " + price_per_night);//Format for output
+        }
+
+    }
 }
+
