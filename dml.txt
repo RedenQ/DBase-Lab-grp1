@@ -3,3 +3,13 @@ DML(DATA MANIPULATION LANGUAGE)
 INSERT
 
 INSERT INTO CLIENT ('fname','lname''phoneno','email','password','credit_no','credit_cvv','debit_no','debit_cvv') values (?,?,?,?,?,?,?,?,?)
+
+INSERT INTO ROOMS (ROOM_ID, AVAILABILITI, ACCOMODATION, PRICE_PER_NIGHT, ROOM_IMG)VALUES  (?,?,?,?,?)
+
+
+
+UPDATE
+
+UPDATE client
+SET fname = ?,  lname= ?, phoneno=?,email=?,password=?, 
+WHERE condition;
