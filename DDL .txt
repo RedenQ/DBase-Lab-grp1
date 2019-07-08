@@ -56,7 +56,6 @@ CREATE TABLE `reservation` (
 
 
 ROOMS
-
 CREATE TABLE `rooms` (
   `room_id` int(11) NOT NULL,
   `Accomodation` varchar(15) NOT NULL,

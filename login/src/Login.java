@@ -3,7 +3,7 @@ import java.util.*;
 
 /**
  *
- * @author d524lab
+ * @author 
  */
 public class Login {
 
@@ -33,6 +33,19 @@ public class Login {
             e.printStackTrace();
         }
     }
+    public void sortAcc(Connection connect) throws SQLException{
+        System.out.print("SORTING");
+    	
+        System.out.println("1.) Cheapest \n2.) Most Expensive \nEnter your choice: ");
+        
+        try{
+            
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    
+    
     
     
 }
