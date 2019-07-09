@@ -13,25 +13,29 @@ public class DbaseProject {
     public static String user = "root";
     public static String pass = "";
     public static int choice = 0;
+    public static DbaseProject db = new DbaseProject();
 
     public static void main(String[] args) {
 
         try {
             Scanner kbd = new Scanner(System.in);
-            DbaseProject db = new DbaseProject();
+
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.print(" 1.) View accomodation \n 2.) Login User \n 3.) Register User \n 4.) View available accomodation from cheapest  to most expensive\n"
-                    + " 5.) View available accomodation from most expensive to cheapest \n Enter the number of your choice: ");
+            System.out.print(" 1.) Login \n 2.) Register \n 3.) View available accomodations \n 4.) Sort(Cheapest - Most Expensive) \n"
+                    + " 5.) Sort(Most Expensive - Cheapest)");
+            System.out.println(" ");
+            System.out.println(" ");
+            System.out.print("Enter the number of your choice: ");
             choice = kbd.nextInt();
             switch (choice) {
                 case 1:
-                    db.viewAcc(conn);
-                    break;
-                case 2:
                     db.login(conn);
                     break;
-                case 3:
+                case 2:
                     db.register();
+                    break;
+                case 3:
+                    db.viewAcc(conn);
                     break;
                 case 4:
                     db.sortAccAsc();
@@ -48,7 +52,7 @@ public class DbaseProject {
     //method for viewing available rooms
     public void viewAcc(Connection conn) throws SQLException {
         Statement myStatement = conn.createStatement();
-
+        System.out.println(" ");
         String query = "select * from rooms";//View query here.
         ResultSet res = myStatement.executeQuery(query);
 
@@ -57,7 +61,7 @@ public class DbaseProject {
             String Accomodation = res.getString(2);
             String Availability = res.getString(3);
             double price_per_night = res.getDouble(4);
-//            byte room_img = res.getByte(5);
+            //byte room_img = res.getByte(5);
             System.out.println(room_id + " - " + Accomodation + " - " + Availability + " - " + price_per_night);//Format for output
         }
     }
@@ -67,15 +71,29 @@ public class DbaseProject {
         Statement state = conn.createStatement();
         Scanner kbd = new Scanner(System.in);
         try {
+            System.out.println(" ");
+            System.out.println("      WELCOME TO LOGIN");
+            System.out.println("ENTER YOU EMAIL AND PASSWORD");
+            System.out.println(" ");
             System.out.print("email: ");
             String email = kbd.next();
             System.out.print("password: ");
             String password = kbd.next();
             ResultSet emailSet = state.executeQuery("SELECT email , password FROM client WHERE email = '" + email + "' AND password = '" + password + "'");
             if (emailSet.next()) {
-                System.out.println("Successfully logged in!!!");
-            } else {
-                System.out.println("Incorrect credentials!!!");
+                db.viewAcc(conn);
+            } else if (!emailSet.next()) {
+                int regChoice = 0;
+                System.out.println(" ");
+                System.out.print(" User not register, do you want to register(yes/no): \n Press (1) if yes, (2) if no: ");
+                regChoice = kbd.nextInt();
+                switch (regChoice) {
+                    case 1:
+                        db.register();
+                        break;
+                    case 2:
+                        System.out.println("              BYE!!!!");
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -107,8 +125,16 @@ public class DbaseProject {
             String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
             state.executeUpdate(query);
 
-            System.out.println("Your account has successfully added! ");
-
+            System.out.print("Do you want to login? Press(1) if yes (2) if no: ");
+            choice = kbd.nextInt();
+            switch (choice) {
+                case 1:
+                    db.login(conn);
+                    break;
+                case 2:
+                    System.out.println("BYE");
+                    break;
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -127,9 +153,10 @@ public class DbaseProject {
 
             System.out.println(room_id + " - " + price_per_night);//Format for output
         }
-
     }
-       public void sortAccDes() throws SQLException {
+
+    //call for sortAccDes()
+    public void sortAccDes() throws SQLException {
         Connection conn = DriverManager.getConnection(url, user, pass);
         Statement state = conn.createStatement();
         String query = "select room_id, price_per_night from rooms order by price_per_night desc"; //View query here.
@@ -141,7 +168,16 @@ public class DbaseProject {
 
             System.out.println(room_id + " - " + price_per_night);//Format for output
         }
+    }
 
+    //method for searching rooms
+    public void searching() throws SQLException {
+        Scanner kbd = new Scanner(System.in);
+
+        Connection conn = DriverManager.getConnection(url, user, pass);
+        Statement state = conn.createStatement();
+
+        System.out.println("Search for room availability: ");
+        String query = "select * from rooms "; //View query here.
     }
 }
-
