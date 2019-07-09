@@ -5,4 +5,7 @@ Fix database
 Create the menu for the app that'll show the available rooms and be able to search and sort (functionality)
 WAG NA GUI console na tayo
 
+
+YVES ,DJ AND DAVID DOCUMENTATION (CREATION OF DATABASE)
+
 Documentation: https://docs.google.com/document/d/1ZwtRVHcpEWM9_veOYWwoHIM7rcSF83pse14sg-0Ccgw/edit?usp=sharing
