@@ -2,17 +2,36 @@ DML(DATA MANIPULATION LANGUAGE)
 
 INSERT
 
-INSERT INTO CLIENT ('fname','lname''phoneno','email','password','credit_no','credit_cvv','debit_no','debit_cvv') values (?,?,?,?,?,?,?,?,?)
+INSERT INTO client (fname, lname, phoneno, email, password, credit_no, credit_cvv, debit_no, debit_cvv) VALUES (?,?,?,?,?,?,?,?,?);
 
-INSERT INTO ROOMS (ROOM_ID, AVAILABILITI, ACCOMODATION, PRICE_PER_NIGHT, ROOM_IMG)VALUES  (?,?,?,?,?)
+INSERT INTO check_out (co_id, cust_chkout_date, cust_chkout_time, additional_fees, reserve_id) VALUES (?,?,?,?,?);
 
+INSERT INTO payment (payment_id, Bill, reserve_id) VALUES (?,?,?);
+
+INSERT INTO reservation (reserve_id, check_in_date, check_in_time, check_out_date, check_out_time, client_id, room_id) VALUES (?,?,?,?,?,?,?);
+
+INSERT INTO rooms (room_id, Accomodation, Availablity, price_per_night, room_img) VALUES (?,?,?,?,?);
 
 
 UPDATE
 
-UPDATE client SET fname = ?,  lname= ?, phoneno=?,email=?,password=?, credit_no=?, credit_cvv=?,debit_no=?,debit_cvv=?
+UPDATE client 
+SET fname = ?, lname=?, phoneno=?, email=?, password=?, credit_no=?, credit_cvv=?, debit_no=?, debit_cvv=?
 WHERE email=?;
 
+UPDATE check_out 
+SET cust_chkout_date=?, cust_chkout_time=?, additional_fees=?, reserve_id=?
+WHERE co_id=?;
 
+UPDATE payment 
+SET Bill =?, reserve_id =?
+WHERE payment_id=?;
 
-DELETE 
+UPDATE reservation
+SET check_in_date=?, check_in_time=?, check_out_date=?, check_out_time=?, client_id=?, room_id=?
+WHERE reserve_id=?;
+
+UPDATE reservation
+SET Accomodation=?, Availability=?, price_per_night=?, room_img=?
+WHERE room_id=?;
+ 

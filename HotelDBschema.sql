@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.7.21, for Win64 (x86_64)
 --
--- Host: localhost    Database: hotel
+-- Host: localhost    Database: accommodation
 -- ------------------------------------------------------
 -- Server version	5.7.21
 
@@ -23,12 +23,11 @@ DROP TABLE IF EXISTS `check_out`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `check_out` (
-  `co_id` int(11) NOT NULL AUTO_INCREMENT,
+  `chkout_id` int(5) NOT NULL,
   `cust_chkout_date` date NOT NULL,
   `cust_chkout_time` time NOT NULL,
-  `additional_fees` double DEFAULT NULL,
-  `reserve_id` int(11) NOT NULL,
-  PRIMARY KEY (`co_id`),
+  `reserve_id` int(5) NOT NULL,
+  PRIMARY KEY (`chkout_id`),
   KEY `BL_id_idx` (`reserve_id`),
   CONSTRAINT `chkout_reserve` FOREIGN KEY (`reserve_id`) REFERENCES `reservation` (`reserve_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -57,10 +56,6 @@ CREATE TABLE `client` (
   `phoneno` varchar(50) NOT NULL,
   `email` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `credit_no` int(11) DEFAULT NULL,
-  `credit_cvv` int(3) DEFAULT NULL,
-  `debit_no` int(11) DEFAULT NULL,
-  `debit_cvv` int(3) DEFAULT NULL,
   PRIMARY KEY (`client_id`),
   UNIQUE KEY `email_UNIQUE` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -76,6 +71,30 @@ LOCK TABLES `client` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `hotel`
+--
+
+DROP TABLE IF EXISTS `hotel`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `hotel` (
+  `hotel_id` int(5) NOT NULL AUTO_INCREMENT,
+  `hotel_name` varchar(45) NOT NULL,
+  `hotel_address` varchar(50) NOT NULL,
+  PRIMARY KEY (`hotel_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `hotel`
+--
+
+LOCK TABLES `hotel` WRITE;
+/*!40000 ALTER TABLE `hotel` DISABLE KEYS */;
+/*!40000 ALTER TABLE `hotel` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `payment`
 --
 
@@ -85,9 +104,16 @@ DROP TABLE IF EXISTS `payment`;
 CREATE TABLE `payment` (
   `payment_id` int(11) NOT NULL AUTO_INCREMENT,
   `Bill` double NOT NULL,
+  `credit_no` varchar(45) DEFAULT NULL,
+  `credit_cvv` varchar(45) DEFAULT NULL,
+  `debit_no` varchar(45) DEFAULT NULL,
+  `debit_cvv` varchar(45) DEFAULT NULL,
+  `client_id` int(5) NOT NULL,
   `reserve_id` int(5) NOT NULL,
   PRIMARY KEY (`payment_id`),
   KEY `reserve_id_idx` (`reserve_id`),
+  KEY `payment_client_idx` (`client_id`),
+  CONSTRAINT `payment_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `payment_reserve` FOREIGN KEY (`reserve_id`) REFERENCES `reservation` (`reserve_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -141,12 +167,14 @@ DROP TABLE IF EXISTS `rooms`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `rooms` (
-  `room_id` int(11) NOT NULL,
-  `Accomodation` varchar(15) NOT NULL,
-  `Availablity` varchar(45) NOT NULL DEFAULT '"Available"',
+  `room_id` int(5) NOT NULL,
+  `Accommodation` varchar(15) NOT NULL,
+  `Availability` varchar(45) NOT NULL DEFAULT '"Available"',
   `price_per_night` int(11) NOT NULL,
-  `room_img` longblob NOT NULL,
-  PRIMARY KEY (`room_id`)
+  `hotel_id` int(5) NOT NULL,
+  PRIMARY KEY (`room_id`),
+  KEY `room_hotel_idx` (`hotel_id`),
+  CONSTRAINT `rooms_hotel` FOREIGN KEY (`hotel_id`) REFERENCES `hotel` (`hotel_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -168,4 +196,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-06 13:20:11
+-- Dump completed on 2019-07-09 14:22:27
