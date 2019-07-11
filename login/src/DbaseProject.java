@@ -144,25 +144,6 @@ public class DbaseProject {
             email = kbd.nextLine();
             System.out.print("Password: ");
             password = kbd.nextLine();
-<<<<<<< HEAD
-            
-            String checkin = "SELECT email FROM client WHERE email ='"+email+"'";
-            String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
-            state.executeUpdate(query);
-            
-            System.out.print("Do you want to login? Press(1) if yes (2) if no, to go back to view accomodations press (3): ");
-            choice = kbd.nextInt();
-            switch (choice) {
-                case 1:
-                    db.login(conn);
-                    break;
-                case 2:
-                    System.out.println("BYE");
-                    break;
-                case 3:
-                    db.viewAcc(conn);
-                    break;
-=======
 
             String check = "select email from client where email = '" + email + "'";
             ResultSet rs = state.executeQuery(check);
@@ -193,7 +174,6 @@ public class DbaseProject {
                         db.viewAcc(conn);
                         break;
                 }
->>>>>>> d01f2d971ffaf6a1de7226249729fdb14271277b
             }
 
         } catch (Exception e) {
