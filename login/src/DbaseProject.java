@@ -15,14 +15,13 @@ public class DbaseProject {
     public static String pass = "";
     public static int choice = 0;
     public static DbaseProject db = new DbaseProject();
-    public static Object clientacc = null;
 
     //main method
     public static void main(String[] args) {
 
         try {
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.print(" 1.) Register \n 2.)Login \n 3.) View available accomodations \n");
+            System.out.print(" 1.) Register \n 2.) View available accomodations \n");
             System.out.println(" ");
             System.out.print("Enter the number of your choice: ");
             choice = kbd.nextInt();
@@ -31,9 +30,6 @@ public class DbaseProject {
                     db.register();
                     break;
                 case 2:
-                    db.login(conn);
-                    break;
-                case 3:
                     db.viewAcc(conn);
                     break;
             }
@@ -49,19 +45,29 @@ public class DbaseProject {
         System.out.println(" ");
         String query = "select * from rooms";//View query here.
         ResultSet res = myStatement.executeQuery(query);
-
+        
+        System.out.println(" ");
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        System.out.println(" ");
+        System.out.println("ROOM ID    ACCCOMODATION    AVAILABILITY    PRICE PER NIGHT");
+        System.out.println(" ");
         while (res.next()) {
             int room_id = res.getInt(1);
             String Accomodation = res.getString(2);
             String Availability = res.getString(3);
             double price_per_night = res.getDouble(4);
-            //byte room_img = res.getByte(5);
-            System.out.println(room_id + " - " + Accomodation + " - " + Availability + " - " + price_per_night);//Format for output
+            System.out.println(room_id + "    -    " + Accomodation + "    -    " + Availability + "    -    " + price_per_night);//Format for output
             System.out.println(" ");//Format for output
         }
+        System.out.println(" ");
+        System.out.println("--------------------------------------------------------------------------------------------------------------");
+        System.out.println(" ");
+
         System.out.println("What do you want to do next?  ");
+        System.out.println(" ");
         System.out.println(" (1) Display from cheapest to most expensive \n (2) Display from most expensive to cheapest"
-                + " \n (3) Book now \n (4) Nevermind");
+                + " \n (3) Book now \n (4) Search according to hotel name \n (5) Exit");
+        System.out.println(" ");
         System.out.print("Enter the number of your choice: ");
         choice = kbd.nextInt();
         switch (choice) {
@@ -72,12 +78,15 @@ public class DbaseProject {
                 db.sortAccDes();
                 break;
             case 3:
-                
                 db.login(conn);
                 break;
             case 4:
+                db.searching();
+                break;
+            case 5:
                 System.out.println("BYE");
                 break;
+
         }
     }
 
@@ -98,7 +107,7 @@ public class DbaseProject {
                 String password = kbd.next();
                 ResultSet emailSet = state.executeQuery("SELECT email , password FROM client WHERE email = '" + email + "' AND AES_DECRYPT(password, 'key') = '" + password + "'");
                 if (emailSet.next()) {
-                    db.viewAcc(conn);
+                    db.promptClient();
                 } else if (!emailSet.next()) {
                     int regChoice = 0;
                     System.out.println(" ");
@@ -188,10 +197,11 @@ public class DbaseProject {
         String query = "select room_id, price_per_night from rooms order by price_per_night asc"; //View query here.
         ResultSet res = state.executeQuery(query);
 
+        System.out.println(" ");//Format for output
+        System.out.println("This is listed from cheapest to most expensive rooms...");//Format for output
         while (res.next()) {
             int room_id = res.getInt(1);
             double price_per_night = res.getDouble(2);
-
             System.out.println(room_id + " - " + price_per_night);//Format for output
         }
     }
@@ -203,10 +213,11 @@ public class DbaseProject {
         String query = "select room_id, price_per_night from rooms order by price_per_night desc"; //View query here.
         ResultSet res = state.executeQuery(query);
 
+        System.out.println(" ");//Format for output
+        System.out.println("This is listed from most expensive to cheapest rooms...");//Format for output
         while (res.next()) {
             int room_id = res.getInt(1);
             double price_per_night = res.getDouble(2);
-
             System.out.println(room_id + " - " + price_per_night);//Format for output
         }
     }
@@ -221,10 +232,40 @@ public class DbaseProject {
 
         System.out.println("Search by hotel name: ");
         name = kbd.nextLine();
-        
+
         String query = "select name from rooms where name = '" + name + "'"; //View query here.
         ResultSet rs = state.executeQuery(query);
-        
+
         System.out.println(rs);
     }
+
+    // This will be the method to prompt after successfully logged in
+    public void promptClient() throws SQLException {
+        System.out.print(" (1) BOOK NOW \n (2) SHOW BOOKED DETAILS \n (3) CANCEL BOOKING  \n Enter the number of your choice: ");
+        choice = kbd.nextInt();
+
+        switch (choice) {
+            case 1:
+                bookNow();
+        }
+    }
+
+    //Method bookNow()
+    public void bookNow() throws SQLException {
+        Connection conn = DriverManager.getConnection(url, user, pass);
+        Statement myStatement = conn.createStatement();
+        System.out.println(" ");
+        String query = "select * from rooms";//View query here.
+        ResultSet res = myStatement.executeQuery(query);
+        System.out.println("This are the available rooms: ");
+        while (res.next()) {
+            int room_id = res.getInt(1);
+            String Accomodation = res.getString(2);
+            String Availability = res.getString(3);
+            double price_per_night = res.getDouble(4);
+            System.out.println(room_id + " - " + Accomodation + " - " + Availability + " - " + price_per_night);//Format for output
+            System.out.println(" ");//Format for output
+        }
+    }
+
 }
