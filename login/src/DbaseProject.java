@@ -144,7 +144,7 @@ public class DbaseProject {
             ResultSet rs = state.executeQuery(check);
 
             if (rs.next()) {
-                System.out.println("Email has already been used! \n Press (1) Login (2) Register");
+                System.out.println("\nEmail has already been used! \n Press (1) Login (2) Register");
                 choice = kbd.nextInt();
                 switch (choice) {
                     case 1:
