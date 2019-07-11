@@ -132,8 +132,8 @@ public class DbaseProject {
             Statement state = conn.createStatement();
 
             String fname, lname, phoneno, email, password;
-            System.out.println("Register your account here");
             System.out.println("  ");
+            System.out.println("Register your account here");
             System.out.print("First name: ");
             fname = kbd.nextLine();
             System.out.print("Last name: ");
@@ -144,6 +144,7 @@ public class DbaseProject {
             email = kbd.nextLine();
             System.out.print("Password: ");
             password = kbd.nextLine();
+<<<<<<< HEAD
             
             String checkin = "SELECT email FROM client WHERE email ='"+email+"'";
             String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
@@ -161,7 +162,40 @@ public class DbaseProject {
                 case 3:
                     db.viewAcc(conn);
                     break;
+=======
+
+            String check = "select email from client where email = '" + email + "'";
+            ResultSet rs = state.executeQuery(check);
+
+            if (rs.next()) {
+                System.out.println("Email has already been used! \n Press (1) Login (2) Register");
+                choice = kbd.nextInt();
+                switch (choice) {
+                    case 1:
+                        login(conn);
+                    case 2:
+                        register();
+                }
+            } else {
+                String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
+                state.executeUpdate(query);
+                System.out.print("Your account has successfully registered!!! ");
+                System.out.print("Do you want to login? \nPress(1) if yes (2) if no, to go back to view accomodations press (3): ");
+                choice = kbd.nextInt();
+                switch (choice) {
+                    case 1:
+                        db.login(conn);
+                        break;
+                    case 2:
+                        System.out.println("BYE");
+                        break;
+                    case 3:
+                        db.viewAcc(conn);
+                        break;
+                }
+>>>>>>> d01f2d971ffaf6a1de7226249729fdb14271277b
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -197,14 +231,20 @@ public class DbaseProject {
         }
     }
 
-    //method for searching rooms
+    //method for searching by hotel
     public void searching() throws SQLException {
         Scanner kbd = new Scanner(System.in);
 
         Connection conn = DriverManager.getConnection(url, user, pass);
         Statement state = conn.createStatement();
+        String name;
 
-        System.out.println("Search for room availability: ");
-        String query = "select * from rooms "; //View query here.
+        System.out.println("Search by hotel name: ");
+        name = kbd.nextLine();
+        
+        String query = "select name from rooms where name = '" + name + "'"; //View query here.
+        ResultSet rs = state.executeQuery(query);
+        
+        System.out.println(rs);
     }
 }
