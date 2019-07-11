@@ -15,13 +15,14 @@ public class DbaseProject {
     public static String pass = "";
     public static int choice = 0;
     public static DbaseProject db = new DbaseProject();
+    public static Object clientacc = null;
 
     //main method
     public static void main(String[] args) {
 
         try {
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.print(" 1.) Register \n 2.) View available accomodations \n");
+            System.out.print(" 1.) Register \n 2.)Login \n 3.) View available accomodations \n");
             System.out.println(" ");
             System.out.print("Enter the number of your choice: ");
             choice = kbd.nextInt();
@@ -30,6 +31,9 @@ public class DbaseProject {
                     db.register();
                     break;
                 case 2:
+                    db.login(conn);
+                    break;
+                case 3:
                     db.viewAcc(conn);
                     break;
             }
@@ -68,6 +72,7 @@ public class DbaseProject {
                 db.sortAccDes();
                 break;
             case 3:
+                
                 db.login(conn);
                 break;
             case 4:
