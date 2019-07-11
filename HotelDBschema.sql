@@ -27,8 +27,11 @@ CREATE TABLE `check_out` (
   `cust_chkout_date` date NOT NULL,
   `cust_chkout_time` time NOT NULL,
   `reserve_id` int(5) NOT NULL,
+  `client_id` int(5) NOT NULL,
   PRIMARY KEY (`chkout_id`),
   KEY `BL_id_idx` (`reserve_id`),
+  KEY `chkout_client_idx` (`client_id`),
+  CONSTRAINT `chkout_client` FOREIGN KEY (`client_id`) REFERENCES `client` (`client_id`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `chkout_reserve` FOREIGN KEY (`reserve_id`) REFERENCES `reservation` (`reserve_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -196,4 +199,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2019-07-09 14:22:27
+-- Dump completed on 2019-07-11 13:25:28
