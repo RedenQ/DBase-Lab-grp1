@@ -15,13 +15,14 @@ public class DbaseProject {
     public static String pass = "";
     public static int choice = 0;
     public static DbaseProject db = new DbaseProject();
+    public static Object clientacc = null;
 
     //main method
     public static void main(String[] args) {
 
         try {
             Connection conn = DriverManager.getConnection(url, user, pass);
-            System.out.print(" 1.) Register \n 2.) View available accomodations \n");
+            System.out.print(" 1.) Register \n 2.)Login \n 3.) View available accomodations \n");
             System.out.println(" ");
             System.out.print("Enter the number of your choice: ");
             choice = kbd.nextInt();
@@ -30,6 +31,9 @@ public class DbaseProject {
                     db.register();
                     break;
                 case 2:
+                    db.login(conn);
+                    break;
+                case 3:
                     db.viewAcc(conn);
                     break;
             }
@@ -68,6 +72,7 @@ public class DbaseProject {
                 db.sortAccDes();
                 break;
             case 3:
+                
                 db.login(conn);
                 break;
             case 4:
@@ -139,10 +144,11 @@ public class DbaseProject {
             email = kbd.nextLine();
             System.out.print("Password: ");
             password = kbd.nextLine();
-
+            
+            String checkin = "SELECT email FROM client WHERE email ='"+email+"'";
             String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
             state.executeUpdate(query);
-
+            
             System.out.print("Do you want to login? Press(1) if yes (2) if no, to go back to view accomodations press (3): ");
             choice = kbd.nextInt();
             switch (choice) {
