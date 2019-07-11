@@ -96,7 +96,7 @@ public class DbaseProject {
                 String email = kbd.next();
                 System.out.print("password: ");
                 String password = kbd.next();
-                ResultSet emailSet = state.executeQuery("SELECT email , password FROM client WHERE email = '" + email + "' AND password = '" + password + "'");
+                ResultSet emailSet = state.executeQuery("SELECT email , password FROM client WHERE email = '" + email + "' AND AES_DECRYPT(password, 'key') = '" + password + "'");
                 if (emailSet.next()) {
                     db.viewAcc(conn);
                 } else if (!emailSet.next()) {
@@ -158,7 +158,7 @@ public class DbaseProject {
                         register();
                 }
             } else {
-                String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' ,'" + password + "' )"; //View query here.
+                String query = "insert into client(fname, lname, phoneno, email, password) values('" + fname + "','" + lname + "' ,'" + phoneno + "' ,'" + email + "' , AES_ENCRYPT('" + password + "', 'key'))"; //View query here.
                 state.executeUpdate(query);
                 System.out.print("Your account has successfully registered!!! ");
                 System.out.print("Do you want to login? \nPress(1) if yes (2) if no, to go back to view accomodations press (3): ");
