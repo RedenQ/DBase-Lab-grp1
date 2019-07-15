@@ -153,20 +153,31 @@ public class DbaseProject {
     public void register(Connection conn) throws SQLException {
         Scanner kbd = new Scanner(System.in);
         try {
+            String fname, lname, phoneno, email, password,password2;
             Statement state = conn.createStatement();
-            String fname, lname, phoneno, email, password;
-            System.out.println("  ");
-            System.out.println("Register your account here");
-            System.out.print("First name: ");
-            fname = kbd.nextLine();
-            System.out.print("Last name: ");
-            lname = kbd.nextLine();
-            System.out.print("Phone number: ");
-            phoneno = kbd.nextLine();
-            System.out.print("Email: ");
-            email = kbd.nextLine();
-            System.out.print("Password: ");
-            password = kbd.nextLine();
+            do {
+                
+                
+                System.out.println("  ");
+                System.out.println("Register your account here");
+                System.out.print("First name: ");
+                fname = kbd.nextLine();
+                System.out.print("Last name: ");
+                lname = kbd.nextLine();
+                System.out.print("Phone number: ");
+                phoneno = kbd.nextLine();
+                System.out.print("Email: ");
+                email = kbd.nextLine();
+                System.out.print("Password: ");
+                password = kbd.nextLine();
+                System.out.print("Re-enter password: ");
+                password2 = kbd.nextLine();
+                if(password.equals(password2)) {
+                    break;
+                }
+                System.out.print("Passwords must be matching");
+            } while(true);
+            
             String check = "select email from client where email = '" + email + "'";
             ResultSet rs = state.executeQuery(check);
 
@@ -369,21 +380,51 @@ public class DbaseProject {
             case 4:
                 Scanner kbd = new Scanner(System.in);
                 System.out.println(" ");
-                System.out.println("Here are the list of room types: ");
-                System.out.println(" > single - This room is for 1 person \n"
-                        + " > double - This room is for 2 persons \n"
-                        + " > triple - This room is for 3 persons \n"
-                        + " > quad - This room is for 4 persons \n"
-                        + " > family - This room is for 4 - 6 persons \n"
-                        + " > suite - This room is for 6 - 10 persons \n"
-                        + " > barkada - This room is for 10 - 15 persons");
-                System.out.println(" ");
+                int roomchoice;
+                ResultSet rt;
+                String roomtype = "";
+                do {
+                    System.out.println("Here are the list of room types: ");
+                    System.out.println(" (1) single - This room is for 1 person \n"
+                            + " (2) double - This room is for 2 persons \n"
+                            + " (3) triple - This room is for 3 persons \n"
+                            + " (4) quad - This room is for 4 persons \n"
+                            + " (5) family - This room is for 4 - 6 persons \n"
+                            + " (6) suite - This room is for 6 - 10 persons \n"
+                            + " (7) barkada - This room is for 10 - 15 persons");
+                    System.out.println(" ");
 
-                System.out.print("Enter the roomtype you want to avail: ");
-                String roomtype = kbd.nextLine();
+                    System.out.print("Enter the number of the roomtype you want to avail: ");
+                    roomchoice = kbd.nextInt();
+                    switch (roomchoice) {
+                        case 1 :  
+                            roomtype = "single";
+                            break;
+                        case 2 :
+                             roomtype = "double";
+                             break;
+                        case 3 :
+                             roomtype = "triple";
+                             break;
+                        case 4 :
+                             roomtype = "quad";
+                             break;
+                        case 5 :
+                             roomtype = "family";
+                             break;
+                        case 6 :
+                             roomtype = "suite";
+                             break;
+                        case 7 :
+                             roomtype = "barkada";
+                             break;
+                        default :
+                            System.out.print("Invalid choice");
+                    }
+                }while (roomchoice <= 0 || roomchoice >=8);
                 System.out.println("");
-                System.out.println("room_id  type  availableRooms  pricePerNight");
-                ResultSet rt = state.executeQuery("select * from rooms where type = '" + roomtype + "' and hotel_id = '" + hotelid + "'");
+                System.out.println("room_id  type  availableRooms  pricePerNight"); 
+                rt = state.executeQuery("select * from rooms where type = '" + roomtype + "' and hotel_id = '" + hotelid + "'");
 
                 while (rt.next()) {
                     int room_id = rt.getInt(1);
@@ -393,7 +434,7 @@ public class DbaseProject {
                     System.out.println(room_id + "  -  " + type + "  -  " + Availability + "  -  " + price_per_night);
 
                     if (Availability == 0) {
-                        System.out.println("The room you've selected is no already available... \n select "
+                        System.out.println("The room you've selected is not available... \n select "
                                 + "other room instead... ");
                         System.out.print("Do you want to go back to booking? \n Press (1) Yes, (2) otherwise");
                         choice = kbd.nextInt();
@@ -410,6 +451,14 @@ public class DbaseProject {
                         System.out.println(" ");
                         System.out.print("Enter the room_id to confirm your booking: ");
                         choice = kbd.nextInt();
+                        System.out.print("When do you plan on checking in: \nInput date MM-DD");
+                        String checkindate = kbd.nextLine();
+                        String[] reformatdate = checkindate.split([.-]);
+                        do {
+                        System.out.print("How many nights do you plan on staying?");
+                        int checkout = kbd.nextInt();
+                        } while (checkout <= 0 || checkout >= 31);
+                        //insert to reservation
                         String update = "update rooms set Availability = (Availability - 1) where room_id = '" + choice + "'";
                         state.executeUpdate(update);
                         System.out.println("------------------------------- ");
