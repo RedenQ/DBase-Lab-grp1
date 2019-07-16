@@ -1,5 +1,6 @@
 
 import java.sql.*;
+import java.time.Year;
 import java.util.*;
 
 /**
@@ -455,14 +456,15 @@ public class DbaseProject {
                         choice = kbd.nextInt();
                         System.out.print("When do you plan on checking in: \nInput date MM-DD");
                         String checkindate = kbd.nextLine();
-                        String[] reformatdate = checkindate.split("[-]");
+                        String reformatdate = Year.now().getValue()+"-"+checkindate;
                         
                         int checkout;
                         do {
                             System.out.print("How many nights do you plan on staying?");
                             checkout = kbd.nextInt();
                         } while (checkout <= 0 || checkout >= 31);
-                        String insReservation = "INSERT INTO reservation(check_in_date,check_in_time,check_out_date,check_out_time,client_id,room_id) values ((YEAR(CURDATE())"+checkindate+"),CURTIME(),,CURTIME(),"clientAcc.getClientId()","room_id")";
+                        String insReservation = "INSERT INTO reservation(check_in_date,check_in_time,check_out_date,check_out_time,client_id,room_id) values ("+reformatdate+",CURTIME(),DATE_ADD("+reformatdate+",INTERVAL "+checkout+" DAYS),CURTIME(),"+clientAcc.getClientId()+","+room_id+")";
+                        state.executeUpdate(insReservation);
                         //insert to reservation
                         String update = "update rooms set Availability = (Availability - 1) where room_id = '" + choice + "'";
                         state.executeUpdate(update);
