@@ -15,6 +15,7 @@ public class DbaseProject {
     public static String pass = "";
     public static int choice = 0;
     public static DbaseProject db = new DbaseProject();
+    public static Accounts clientAcc = null;
 
     //main method
     public static void main(String[] args) {
@@ -110,8 +111,9 @@ public class DbaseProject {
                     String email = kbd.next();
                     System.out.print("password: ");
                     String password = kbd.next();
-                    ResultSet emailSet = state.executeQuery("SELECT email , password FROM client WHERE email = '" + email + "' AND AES_DECRYPT(password, 'key') = '" + password + "'");
+                    ResultSet emailSet = state.executeQuery("SELECT * FROM client WHERE email = '" + email + "' AND AES_DECRYPT(password, 'key') = '" + password + "'");
                     if (emailSet.next()) {
+                        clientAcc = new Accounts(emailSet.getString("client_id"),emailSet.getString("fname"),emailSet.getString("lname"),emailSet.getString("email"),emailSet.getString("phoneno"));
                         db.promptClient(conn);
                     } else if (!emailSet.next()) {
                         int regChoice;
@@ -307,7 +309,7 @@ public class DbaseProject {
         ResultSet rs = state.executeQuery("SELECT * from rooms where hotel_id = '" + hotelid + "'");
         System.out.println("----------------------------------------------------------");
         System.out.println("room_id   accomodation   availability   price_per_night");
-
+        
         while (rs.next()) {
             int room_id = rs.getInt(1);
             String Accomodation = rs.getString(2);
@@ -453,11 +455,14 @@ public class DbaseProject {
                         choice = kbd.nextInt();
                         System.out.print("When do you plan on checking in: \nInput date MM-DD");
                         String checkindate = kbd.nextLine();
-                        String[] reformatdate = checkindate.split([.-]);
+                        String[] reformatdate = checkindate.split("[-]");
+                        
+                        int checkout;
                         do {
-                        System.out.print("How many nights do you plan on staying?");
-                        int checkout = kbd.nextInt();
+                            System.out.print("How many nights do you plan on staying?");
+                            checkout = kbd.nextInt();
                         } while (checkout <= 0 || checkout >= 31);
+                        String insReservation = "INSERT INTO reservation(check_in_date,check_in_time,check_out_date,check_out_time,client_id,room_id) values ((YEAR(CURDATE())"+checkindate+"),CURTIME(),,CURTIME(),"clientAcc.getClientId()","room_id")";
                         //insert to reservation
                         String update = "update rooms set Availability = (Availability - 1) where room_id = '" + choice + "'";
                         state.executeUpdate(update);
@@ -501,5 +506,4 @@ public class DbaseProject {
     public void cancelBooking(Connection conn) throws SQLException {
 
     }
-
 }
